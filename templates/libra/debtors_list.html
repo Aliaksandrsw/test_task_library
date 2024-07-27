@@ -1,0 +1,31 @@
+{% extends 'libra/base.html' %}
+
+{% block content %}
+<h1>Список должников</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Имя пользователя</th>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Адрес</th>
+            <th>Название книги</th>
+            <th>Дата получения</th>
+            <th>Дней на руках</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for debtor in debtors_list %}
+        <tr>
+            <td>{{ debtor.username }}</td>
+            <td>{{ debtor.first_name }}</td>
+            <td>{{ debtor.last_name }}</td>
+            <td>{{ debtor.address }}</td>
+            <td>{{ debtor.book_title }}</td>
+            <td>{{ debtor.borrow_date|date:"d.m.Y" }}</td>
+            <td>{{ debtor.days_borrowed }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

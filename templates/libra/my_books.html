@@ -1,0 +1,27 @@
+{% extends 'libra/base.html' %}
+
+{% load bootstrap4 %}
+
+{% block content %}
+<h1 class="my-4">Мои книги</h1>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Название</th>
+                <th scope="col">Дата получения</th>
+                <th scope="col">Дней на руках</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in my_books %}
+            <tr>
+                <td>{{ book.book.title }}</td>
+                <td>{{ book.borrow_date|date:"d.m.Y" }}</td>
+                <td>{{ book.days_borrowed }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "libra/base.html" %}
+
+{% block content %}
+    <h1>Список книг</h1>
+    <ul class="list-group">
+        {% for book, is_borrowed, borrow_form, return_form in books_with_status %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ book.title }} ({{ book.author }}) - {{ book.genre }}
+                <div>
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        {% if is_borrowed %}
+                            {{ return_form.as_p }}
+                            <button type="submit" name="return" class="btn btn-warning">Вернуть книгу</button>
+                        {% else %}
+                            {{ borrow_form.as_p }}
+                            <button type="submit" name="borrow" class="btn btn-primary">Взять книгу</button>
+                        {% endif %}
+                    </form>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

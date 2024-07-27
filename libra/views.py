@@ -1,21 +1,29 @@
+from django.contrib.auth.models import AnonymousUser
 from django.views import View
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 
+from .mixins import ReaderRequiredMixin, LibRequiredMixin
 from .models import Book, MyBook
 from users.models import Reader
 from .forms import BorrowBookForm, ReturnBookForm
 
 
-class BookListView(View):
+class BaseViews(TemplateView):
+    template_name = 'libra/base.html'
+
+
+class BookListView(ReaderRequiredMixin, View):
     template_name = 'libra/home.html'
 
     def get(self, request):
+        if isinstance(request.user, AnonymousUser):
+            return render(request, self.template_name, {'error': 'Пользователь не авторизован.'})
+
         try:
             reader = Reader.objects.get(user=request.user)
         except Reader.DoesNotExist:
-
             return render(request, self.template_name, {'error': 'Пользователь не зарегистрирован как читатель.'})
 
         books = Book.objects.all()
@@ -29,10 +37,12 @@ class BookListView(View):
         return render(request, self.template_name, {'books_with_status': books_with_status})
 
     def post(self, request):
+        if isinstance(request.user, AnonymousUser):
+            return render(request, self.template_name, {'error': 'Пользователь не авторизован.'})
+
         try:
             reader = Reader.objects.get(user=request.user)
         except Reader.DoesNotExist:
-
             return render(request, self.template_name, {'error': 'Пользователь не зарегистрирован как читатель.'})
 
         if 'borrow' in request.POST:
@@ -52,7 +62,7 @@ class BookListView(View):
         return redirect('book_list')
 
 
-class MyBooksView(ListView):
+class MyBooksView(ReaderRequiredMixin, ListView):
     model = MyBook
     template_name = 'libra/my_books.html'
     context_object_name = 'my_books'
@@ -71,7 +81,7 @@ class MyBooksView(ListView):
         return context
 
 
-class DebtorsListView(View):
+class DebtorsListView(LibRequiredMixin, View):
     template_name = 'libra/debtors_list.html'
 
     def get(self, request):
