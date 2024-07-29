@@ -1,20 +1,14 @@
 from pathlib import Path
 from datetime import timedelta
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-npbme4x_%eat(3674wc-xx=j85f7k11-chkx_m9b5*m+a%2(2!'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -30,6 +24,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'library_api.apps.LibraryApiConfig',
     'drf_spectacular',
+    'simple_history',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +35,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'library.urls'
@@ -62,8 +58,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'library.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
@@ -72,8 +67,6 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -98,8 +91,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
+
 
 STATIC_URL = 'static/'
 
